@@ -1,8 +1,11 @@
 import art
-characters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-            ' ', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-']
+characters = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+'
+    ' ', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-']
 
 def caesar(input_text, shift_amount, encode_or_decode):
     output_text = ""
@@ -20,7 +23,7 @@ def caesar(input_text, shift_amount, encode_or_decode):
 print(art.logo)
 while True:
     direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
-    text = input("Type your message:\n").lower()
+    text = input("Type your message:\n")
     shift = int(input("Type the shift number:\n"))
     caesar(text, shift, direction)
     done = input("Do you want to Continue or Quit?\n").lower()
