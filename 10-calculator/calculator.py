@@ -1,3 +1,4 @@
+# Calculator Project by Robert Laurie
 import art
 
 def add(n1, n2):
@@ -8,36 +9,20 @@ def subtract(n1, n2):
 
 def multiply(n1, n2):
     return n1 * n2
-
+    
 def divide(n1, n2):
     return n1 / n2
 
-operations = {
-    "+": add,
-    "-": subtract,
-    "*": multiply,
-    "/": divide,
-}
-# print(operations["*"](4, 8))
-def calculator():
-    print(art.logo)
-    should_accumulate = True
-    num1 = float(input("What is the first number?: "))
-    while should_accumulate:
-        for symbol in operations:
-            print(symbol)
-        operation_symbol = input("Pick an operation: ")
-        num2 = float(input("What is the next number?: "))
-        answer = operations[operation_symbol](num1, num2)
-        print(f"{num1} {operation_symbol} {num2} = {answer}")
-
-        choice = input(f"Type 'y' to continue calculating with {answer}, or type 'n' to start a new calculation: ")
-
-        if choice == "y":
-            num1 = answer
-        else:
-            should_accumulate = False
-            print("\n" * 20)
-            calculator()
-
-calculator()
+print(art.logo)
+print("Welcome to the RPN Calculator Project")
+operations = {'+':add, '-': subtract, '*':multiply, '/':divide}
+loop = 'y'
+accum = float(input("What is the first number? "))
+while loop == 'y':
+    number = float(input("What is the next number? "))
+    op = input("What is the operation? + - * /? ")
+    answer = operations[op](accum, number)
+    print(f"Your result for {accum} {op} {number} = {answer}")
+    loop = input("Use answer for next operation? Y or N \n").lower()
+    if loop == 'y':
+        accum = answer
