@@ -62,61 +62,61 @@ def has_black_jack(bHand, bDeck):
     else:
         return False
 
+def black_jack_hand():
+    dealer_hand = []
+    gambler_hand = []
+    hand_ends = False
+    for _ in range(2):  # Loop for starting  hand of two cards each
+        gambler_hand.append(deal_card(cards))
+        dealer_hand.append(deal_card(cards))
+        if has_black_jack(gambler_hand, deck):
+            if not has_black_jack(dealer_hand, deck):
+                print(f"Gambler has Black Jack {print_cards(gambler_hand)} and Wins 1.5 x bet")
+            else:
+                print(f"Gambler {print_cards(gambler_hand)} and Dealer {print_cards(dealer_hand)} both have Black Jack! It is a push")
+            hand_ends = True
+    print(f"Dealer card showing is {dealer_hand[0]}")
+    while not hand_ends:  # Gambler draws more cards
+        gambler_sum = cards_sum(gambler_hand, deck)
+        print(f"The gambler cards are: {print_cards(gambler_hand)}which is {gambler_sum} points")
+        count = len(gambler_hand)
+        if gambler_sum == 21:
+            print("Gambler has 21 and must hold")
+            break
+        elif gambler_sum > 21:
+            print("Gambler is Bust and lost bet")
+            hand_ends = True
+        elif count == 5:
+            print("Gambler has 5 Card Charlie and wins bet")
+            hand_ends = True
+        else:
+            y_or_n = input("Would you like to draw another card (Y or n)? ").lower()
+            if y_or_n == 'y':
+                gambler_hand.append(deal_card(cards))
+            else:
+                break
+    while not hand_ends:  # Dealer draws more cards
+        dealer_sum = cards_sum(dealer_hand, deck)
+        time.sleep(1)
+        print(f"The dealer cards are: {print_cards(dealer_hand)}which is {dealer_sum} points")
+        if dealer_sum < 17:
+            dealer_hand.append(deal_card(cards))
+        elif gambler_sum > 21:
+            print("Dealer is Bust and Gambler won bet")
+            hand_ends = True
+        else:
+            break
+    if hand_ends == False:
+        if gambler_sum > dealer_sum:
+            print("Gambler wins bet")
+        elif gambler_sum == dealer_sum:
+            print("Gambler retains bet it is a push")
+        else:
+            print("Gambler loses bet")
+
 print(art.logo)
 print("Welcome to the Black Jack Game")
 deck = make_deck()
 cards = shuffle_deck(deck)
-dealer_hand = []
-gambler_hand = []
-game_ends = False
-for _ in range(2):  # Loop for starting  hand of two cards each
-    gambler_hand.append(deal_card(cards))
-    dealer_hand.append(deal_card(cards))
-    if has_black_jack(gambler_hand, deck):
-        if not has_black_jack(dealer_hand, deck):
-            print(f"Gambler has Black Jack {print_cards(gambler_hand)} and Wins 1.5 x bet")
-        else:
-            print(f"Gambler {print_cards(gambler_hand)} and Dealer {print_cards(dealer_hand)} both have Black Jack! It is a push")
-        game_ends = True
-print(f"Dealer card showing is {dealer_hand[0]}")
-while not game_ends:  # Gambler draws more cards
-    gambler_sum = cards_sum(gambler_hand, deck)
-    print(f"The gambler cards are: {print_cards(gambler_hand)}which is {gambler_sum} points")
-    count = len(gambler_hand)
-    if gambler_sum == 21:
-        print("Gambler has 21 and must hold")
-        break
-    elif gambler_sum > 21:
-        print("Gambler is Bust and lost bet")
-        game_ends = True
-    elif count == 5:
-        print("Gambler has 5 Card Charlie and wins bet")
-        game_ends = True
-    else:
-        y_or_n = input("Would you like to draw another card (Y or n)? ").lower()
-        if y_or_n == 'y':
-            gambler_hand.append(deal_card(cards))
-        else:
-            break
-while not game_ends:  # Dealer draws more cards
-    dealer_sum = cards_sum(dealer_hand, deck)
-    time.sleep(1)
-    print(f"The dealer cards are: {print_cards(dealer_hand)}which is {dealer_sum} points")
-    if dealer_sum < 17:
-        dealer_hand.append(deal_card(cards))
-    else:
-        break
-    
-
-    
-#flag_dealer = evaluate_hand(dealer_hand, n
-# deck)
-    
-
-
-# for i in range(3):
-#     sum = cardsclea
-#     print(sum)
-
-
-
+print(print_cards(cards))
+black_jack_hand()
