@@ -62,10 +62,11 @@ def has_black_jack(bHand, bDeck):
     else:
         return False
 
-def black_jack_hand():
+def black_jack_hand(bHand_count):
     dealer_hand = []
     gambler_hand = []
     hand_ends = False
+    bHand_count += 1
     for _ in range(2):  # Loop for starting  hand of two cards each
         gambler_hand.append(deal_card(cards))
         dealer_hand.append(deal_card(cards))
@@ -90,7 +91,7 @@ def black_jack_hand():
             print("Gambler has 5 Card Charlie and wins bet")
             hand_ends = True
         else:
-            y_or_n = input("Would you like to draw another card (Y or n)? ").lower()
+            y_or_n = input("Would you like to draw another card (Y or N)? ").lower()
             if y_or_n == 'y':
                 gambler_hand.append(deal_card(cards))
             else:
@@ -112,11 +113,17 @@ def black_jack_hand():
         elif gambler_sum == dealer_sum:
             print("Gambler retains bet it is a push")
         else:
-            print("Gambler loses bet")
+            print("Gambler loses bet") 
+    y_or_n = input("Do you want play another hand? (Y or N)").lower()
+    if y_or_n == 'y':
+        black_jack_hand(bHand_count)
+    else:
+        print(f"Thank you for playing {bHand_count} hands of Black Jack\nGood Bye")
+        return
 
 print(art.logo)
 print("Welcome to the Black Jack Game")
 deck = make_deck()
 cards = shuffle_deck(deck)
 print(print_cards(cards))
-black_jack_hand()
+black_jack_hand(0)
