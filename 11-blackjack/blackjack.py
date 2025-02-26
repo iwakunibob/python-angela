@@ -6,10 +6,10 @@ import time
 def make_deck():
     """Function makes card deck. Return deck dictionary with cards and point values"""
     fDeck = {}
-    suits = ['\u2666', '\u2665',  '\u2660', '\u2663']
-    ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-    for suit in suits:
-        for rank in ranks:
+    SUITS = ['\u2666', '\u2665',  '\u2660', '\u2663']
+    RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    for suit in SUITS:
+        for rank in RANKS:
             key = rank + suit
             if rank == 'A':
                 points = 11
@@ -26,7 +26,6 @@ def shuffle_deck(sDeck):
     for card in sDeck:
         sCards.append(card)
     random.shuffle(sCards)
-
     return sCards
 
 def deal_card(dCards):
@@ -70,11 +69,11 @@ def black_jack_hand(bHand_count):
     for _ in range(2):  # Loop for starting  hand of two cards each
         gambler_hand.append(deal_card(cards))
         dealer_hand.append(deal_card(cards))
-        if has_black_jack(gambler_hand, deck):
-            if not has_black_jack(dealer_hand, deck):
-                print(f"Gambler has Black Jack {print_cards(gambler_hand)} and Wins 1.5 x bet")
+        if has_black_jack(gambler_hand, deck): # Check if gambler has Black Jack
+            if not has_black_jack(dealer_hand, deck): # Check if dealer doesn't have Black Jack
+                print(f"Gambler has Black Jack {print_cards(gambler_hand)} and Wins 1.5 x bet. Dealer had {print_cards(dealer_hand)}")
             else:
-                print(f"Gambler {print_cards(gambler_hand)} and Dealer {print_cards(dealer_hand)} both have Black Jack! It is a push")
+                print(f"Both the Gambler {print_cards(gambler_hand)} and Dealer {print_cards(dealer_hand)} both have Black Jack! It is a push")
             hand_ends = True
     print(f"Dealer card showing is {dealer_hand[0]}")
     while not hand_ends:  # Gambler draws more cards
@@ -114,11 +113,15 @@ def black_jack_hand(bHand_count):
             print("Gambler retains bet it is a push")
         else:
             print("Gambler loses bet") 
-    y_or_n = input("Do you want play another hand? (Y or N)").lower()
+    print(f"Hands played is {bHand_count} and {len(cards)} cards remaining")
+    y_or_n = input("Do you want play another hand (Y or N)? ").lower()   
     if y_or_n == 'y':
+        # if len(cards) < 20:
+        #     cards = []
+        #     cards = shuffle_deck(deck)
         black_jack_hand(bHand_count)
     else:
-        print(f"Thank you for playing {bHand_count} hands of Black Jack\nGood Bye")
+        print(f"Thank you for playing Black Jack\nGood Bye")
         return
 
 print(art.logo)
