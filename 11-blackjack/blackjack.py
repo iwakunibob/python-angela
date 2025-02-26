@@ -1,13 +1,13 @@
-# Black Jack Game Project by Robert Laurie
+# Blackjack Game Project by Robert Laurie
 import art
 import random
 import time
 
 def make_deck():
-    """Function makes card deck. Return deck dictionary with cards and point values"""
-    fDeck = {}
+    """Make card deck. Return deck dictionary with cards and point values"""
     SUITS = ['\u2666', '\u2665',  '\u2660', '\u2663']
     RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    deck = {}
     for suit in SUITS:
         for rank in RANKS:
             key = rank + suit
@@ -17,28 +17,30 @@ def make_deck():
                 points = 10
             else:    
                 points = int(rank)
-            fDeck[key] = points
-    return fDeck
+            deck[key] = points
+    return deck
 
-def shuffle_deck(sDeck):
-    """Parmameter is a deck dictionary. Returns list of shuffled cards"""
-    sCards = []
-    for card in sDeck:
-        sCards.append(card)
-    random.shuffle(sCards)
-    return sCards
+def shuffle_cards(deck, qty):
+    """ Parmameters are a deck dictionary and quantity of decks. 
+        Returns a list of shuffled cards made from multiple decks"""
+    cards = []
+    for _ in range(qty):
+        for card in deck:
+            cards.append(card)
+    random.shuffle(cards)
+    return cards
 
-def deal_card(dCards):
-    """Parmameters are deck dictionary and cards list. Returns one card"""
-    dCard = dCards.pop(0)
-    return dCard
+def deal_card(cards):
+    """Parmameters is a list of cards. Returns one card"""
+    card = cards.pop(0)
+    return card
 
-def cards_sum(cCards, cDeck):
+def cards_sum(cards, deck):
     """Parameters are cards list and dictionary of cards. Returns cards score"""
     sum = 0
     aces = 0
-    for card in cCards: 
-        sum += cDeck[card]
+    for card in cards: 
+        sum += deck[card]
         if card[0] == 'A':
             aces += 1
     if sum > 21 and aces != 0:
@@ -46,39 +48,30 @@ def cards_sum(cCards, cDeck):
             sum -= 10
     return sum
 
-def print_cards(pCards):
+def cards_string(cards):
     """Parameter is cards list. Returns a string representing all cards"""
-    card_string = ""
-    for card in pCards:
-        card_string += card + " "
-    return card_string
+    string = ""
+    for card in cards:
+        string += card + " "
+    return string
 
-def has_black_jack(bHand, bDeck):
-    sum = cards_sum(bHand, bDeck)
-    count = len(bHand)
-    if sum == 21 and count == 2:
-        return True
-    else:
-        return False
-
-def black_jack_hand(bHand_count):
+def black_jack_hand(cards):
     dealer_hand = []
     gambler_hand = []
     hand_ends = False
-    bHand_count += 1
     for _ in range(2):  # Loop for starting  hand of two cards each
         gambler_hand.append(deal_card(cards))
         dealer_hand.append(deal_card(cards))
-        if has_black_jack(gambler_hand, deck): # Check if gambler has Black Jack
-            if not has_black_jack(dealer_hand, deck): # Check if dealer doesn't have Black Jack
-                print(f"Gambler has Black Jack {print_cards(gambler_hand)} and Wins 1.5 x bet. Dealer had {print_cards(dealer_hand)}")
-            else:
-                print(f"Both the Gambler {print_cards(gambler_hand)} and Dealer {print_cards(dealer_hand)} both have Black Jack! It is a push")
-            hand_ends = True
     print(f"Dealer card showing is {dealer_hand[0]}")
+    if cards_sum(gambler_hand, deck) == 21:
+        if cards_sum(dealer_hand, deck) == 21:
+            print(f"Both the Gambler {cards_string(gambler_hand)} and Dealer {cards_string(dealer_hand)} have Black Jack!\nIt is a push")
+        else:
+            print(f"Gambler has Black Jack {cards_string(gambler_hand)} and Wins 1.5 x bet. Dealer had {cards_string(dealer_hand)}")
+        hand_ends = True
     while not hand_ends:  # Gambler draws more cards
         gambler_sum = cards_sum(gambler_hand, deck)
-        print(f"The gambler cards are: {print_cards(gambler_hand)}which is {gambler_sum} points")
+        print(f"The gambler cards are: {cards_string(gambler_hand)}which is {gambler_sum} points")
         count = len(gambler_hand)
         if gambler_sum == 21:
             print("Gambler has 21 and must hold")
@@ -90,18 +83,18 @@ def black_jack_hand(bHand_count):
             print("Gambler has 5 Card Charlie and wins bet")
             hand_ends = True
         else:
-            y_or_n = input("Would you like to draw another card (Y or N)? ").lower()
+            y_or_n = input("Would you like to draw another card (y or n)? ").lower()
             if y_or_n == 'y':
                 gambler_hand.append(deal_card(cards))
             else:
                 break
     while not hand_ends:  # Dealer draws more cards
         dealer_sum = cards_sum(dealer_hand, deck)
-        time.sleep(1)
-        print(f"The dealer cards are: {print_cards(dealer_hand)}which is {dealer_sum} points")
+        time.sleep(0.8)
+        print(f"The dealer cards are: {cards_string(dealer_hand)}which is {dealer_sum} points")
         if dealer_sum < 17:
             dealer_hand.append(deal_card(cards))
-        elif gambler_sum > 21:
+        elif dealer_sum > 21:
             print("Dealer is Bust and Gambler won bet")
             hand_ends = True
         else:
@@ -113,20 +106,24 @@ def black_jack_hand(bHand_count):
             print("Gambler retains bet it is a push")
         else:
             print("Gambler loses bet") 
-    print(f"Hands played is {bHand_count} and {len(cards)} cards remaining")
-    y_or_n = input("Do you want play another hand (Y or N)? ").lower()   
+    print(f"{len(cards)} cards remaining")
+    y_or_n = input("Do you want play another hand (y or n)? ").lower()   
     if y_or_n == 'y':
-        # if len(cards) < 20:
-        #     cards = []
-        #     cards = shuffle_deck(deck)
-        black_jack_hand(bHand_count)
+        if len(cards) < 30:
+            cards = []
+            cards = shuffle_cards(deck, decks)
+            print("Please wait reshuffling cards")
+            time.sleep(1)
+        black_jack_hand(cards)
     else:
         print(f"Thank you for playing Black Jack\nGood Bye")
         return
 
 print(art.logo)
-print("Welcome to the Black Jack Game")
+print("Welcome to the Blackjack Game")
 deck = make_deck()
-cards = shuffle_deck(deck)
-print(print_cards(cards))
-black_jack_hand(0)
+decks = int(input("How many 52 card decks would you like to use? "))
+cards = shuffle_cards(deck, decks)
+print(cards_string(cards))
+chips = int(input("How many $1 chips would you like to buy? "))
+black_jack_hand(cards)
