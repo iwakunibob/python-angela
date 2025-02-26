@@ -63,6 +63,8 @@ def black_jack_hand(cards, chips):
         bet = int(input(f"You have ${chips} in chips. What is your bet ? $"))
         if bet <= chips:
             break
+        else:
+            print(f"Your bet cannot excede your chips. Try again")
     for _ in range(2):  # Loop for starting  hand of two cards each
         gambler_hand.append(deal_card(cards))
         dealer_hand.append(deal_card(cards))
