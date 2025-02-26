@@ -55,10 +55,14 @@ def cards_string(cards):
         string += card + " "
     return string
 
-def black_jack_hand(cards):
+def black_jack_hand(cards, chips):
     dealer_hand = []
     gambler_hand = []
     hand_ends = False
+    while True:
+        bet = int(input(f"You have ${chips} in chips. What is your bet ? $"))
+        if bet <= chips:
+            break
     for _ in range(2):  # Loop for starting  hand of two cards each
         gambler_hand.append(deal_card(cards))
         dealer_hand.append(deal_card(cards))
@@ -68,6 +72,7 @@ def black_jack_hand(cards):
             print(f"Both the Gambler {cards_string(gambler_hand)} and Dealer {cards_string(dealer_hand)} have Black Jack!\nIt is a push")
         else:
             print(f"Gambler has Black Jack {cards_string(gambler_hand)} and Wins 1.5 x bet. Dealer had {cards_string(dealer_hand)}")
+            chips += bet * 1.5
         hand_ends = True
     while not hand_ends:  # Gambler draws more cards
         gambler_sum = cards_sum(gambler_hand, deck)
@@ -78,9 +83,11 @@ def black_jack_hand(cards):
             break
         elif gambler_sum > 21:
             print("Gambler is Bust and lost bet")
+            chips -= bet
             hand_ends = True
         elif count == 5:
             print("Gambler has 5 Card Charlie and wins bet")
+            chips += bet
             hand_ends = True
         else:
             y_or_n = input("Would you like to draw another card (y or n)? ").lower()
@@ -96,16 +103,19 @@ def black_jack_hand(cards):
             dealer_hand.append(deal_card(cards))
         elif dealer_sum > 21:
             print("Dealer is Bust and Gambler won bet")
+            chips += bet
             hand_ends = True
         else:
             break
     if hand_ends == False:
         if gambler_sum > dealer_sum:
             print("Gambler wins bet")
+            chips += bet
         elif gambler_sum == dealer_sum:
             print("Gambler retains bet it is a push")
         else:
             print("Gambler loses bet") 
+            chips -= bet
     print(f"{len(cards)} cards remaining")
     y_or_n = input("Do you want play another hand (y or n)? ").lower()   
     if y_or_n == 'y':
@@ -114,9 +124,13 @@ def black_jack_hand(cards):
             cards = shuffle_cards(deck, decks)
             print("Please wait reshuffling cards")
             time.sleep(1)
-        black_jack_hand(cards)
+        if chips <= 0:
+            print(f"You are bankrupt and need to buy more chips\nGood Bye")
+            return
+        else:
+            black_jack_hand(cards, chips)
     else:
-        print(f"Thank you for playing Black Jack\nGood Bye")
+        print(f"Thank you for playing Blackjack\nGood Bye")
         return
 
 print(art.logo)
@@ -125,5 +139,5 @@ deck = make_deck()
 decks = int(input("How many 52 card decks would you like to use? "))
 cards = shuffle_cards(deck, decks)
 print(cards_string(cards))
-chips = int(input("How many $1 chips would you like to buy? "))
-black_jack_hand(cards)
+chips = int(input("How many chips would you like to buy ? $"))
+black_jack_hand(cards, chips)
